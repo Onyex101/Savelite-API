@@ -201,3 +201,14 @@ export class DeleteDto {
     readonly budgetId: string;
 
 }
+
+// tslint:disable-next-line: max-classes-per-file
+export class ProfileUpdateDto {
+
+    @ApiModelProperty()
+    readonly type: string;
+
+    @ApiModelProperty()
+    readonly input: any;
+
+}

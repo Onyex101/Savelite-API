@@ -1,4 +1,4 @@
-import { TokenDto } from './../../dto/interface.dto';
+import { TokenDto, ImageDto, ProfileUpdateDto } from './../../dto/interface.dto';
 import { Injectable } from '@nestjs/common';
 import { ModelService } from '../model.service';
 
@@ -35,6 +35,23 @@ export class UserService extends ModelService {
                 reject(err);
             });
         });
+    }
+
+    public async changeProfileImage(user: any, body: ImageDto) {
+        return await this.userModel.findOneAndUpdate({
+            _id: user.id,
+        }, {$set: {
+            profileImage: body.link,
+            imgDelHash: body.deletehash,
+        }}, {new: true});
+    }
+
+    public async updateProfile(user: any, body: ProfileUpdateDto) {
+        return await this.userModel.findOneAndUpdate({
+            _id: user.id,
+        }, {$set: {
+            [body.type]: body.input,
+        }}, {new: true});
     }
 
     public async saveToken(user: any, body: TokenDto) {

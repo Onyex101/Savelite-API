@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { IPlan } from './../model/plan.model';
 import { IUser } from './../model/user.model';
 import { IExpense } from './../model/expense.model';
+import { CloudNotificationService } from './cloud-notification.service';
 
 @Injectable()
 export abstract class ModelService {
@@ -11,6 +12,7 @@ export abstract class ModelService {
         @InjectModel('User') protected readonly userModel: Model<IUser>,
         @InjectModel('Plans') protected readonly planModel: Model<IPlan>,
         @InjectModel('Expense') protected readonly expenseModel: Model<IExpense>,
+        protected notification: CloudNotificationService,
     ) {}
 
     protected errorHandler(err: any) {

@@ -2,7 +2,7 @@ import { Controller, Get, Request, Post, UseGuards, Body, Response, NotFoundExce
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { AuthService } from './../../auth/auth.service';
-import { CreateDto, LoginDto, TokenDto } from './../../dto/interface.dto';
+import { CreateDto, LoginDto, TokenDto, ImageDto, ProfileUpdateDto } from './../../dto/interface.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,6 +36,7 @@ export class UserController {
             email: req.user.email,
             phone_no: req.user.phone_no,
             profileImage: req.user.profileImage,
+            imageDeleteHash: req.user.imageDeleteHash,
             firebaseToken: req.user.firebaseToken,
         };
         res.send(userDetails);
@@ -59,6 +60,26 @@ export class UserController {
         try {
             await this.userService.saveToken(req.user, body);
             return {status: 200, message: 'Success'};
+        } catch (error) {
+            throw new NotFoundException(error);
+        }
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('update')
+    async updateInfo(@Request() req, @Body() body: ProfileUpdateDto) {
+        try {
+            return await this.userService.updateProfile(req.user, body);
+        } catch (error) {
+            throw new NotFoundException(error);
+        }
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('image')
+    async updateProfileImage(@Request() req, @Body() body: ImageDto) {
+        try {
+            return await this.userService.changeProfileImage(req.user, body);
         } catch (error) {
             throw new NotFoundException(error);
         }

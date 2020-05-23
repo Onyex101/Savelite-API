@@ -8,6 +8,7 @@ import { PlanService } from './../plans/plans.service';
 import { plansSchema } from './../../model/plan.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { expenseSchema } from 'src/model/expense.model';
+import { CloudNotificationService } from './../cloud-notification.service';
 
 @Module({
     imports: [
@@ -18,10 +19,10 @@ import { expenseSchema } from 'src/model/expense.model';
             {name: 'Expense', schema: expenseSchema},
         ]),
         PassportModule.register({defaultStrategy: 'jwt', session: false}),
-    ], 
-    exports: [UserService, PlanService],
+    ],
+    exports: [UserService, PlanService, CloudNotificationService],
     controllers: [UserController],
-    providers: [UserService, PlanService],
+    providers: [UserService, PlanService, CloudNotificationService],
 })
 
 export class UserModule {}
