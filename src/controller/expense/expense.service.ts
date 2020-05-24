@@ -58,6 +58,17 @@ export class ExpenseService extends ModelService {
         }
     }
 
+    public async removeBudget(user, budget: any) {
+        try {
+            return await this.expenseModel.findByIdAndRemove({
+                _id: budget.id,
+                _userID: user.id,
+            });
+        } catch (err) {
+            return this.errorHandler(err);
+        }
+    }
+
     public async editExpense(budgetId: string, data: ExpenseDto, user: any, id: string): Promise<any> {
         const body = _.pick(data, ['date', 'amount', 'category', 'descr', 'remark', 'icon']);
         if (!ObjectID.isValid(id)) {

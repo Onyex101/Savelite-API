@@ -31,6 +31,16 @@ export class ExpenseController {
     }
 
     @UseGuards(AuthGuard('jwt'))
+    @Post('del-budget')
+    async removeBudget(@Body() body: any, @Request() req) {
+        try {
+            return await this.expService.removeBudget(req.user, body);
+        } catch (error) {
+            throw new NotImplementedException(error);
+        }
+    }
+
+    @UseGuards(AuthGuard('jwt'))
     @Post(':id')
     async addExpense(@Param('id') id: string, @Request() req, @Body() body: ExpenseDto) {
         try {
@@ -89,4 +99,5 @@ export class ExpenseController {
             throw new NotImplementedException(error);
         }
     }
+
 }
