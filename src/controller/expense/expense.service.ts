@@ -7,6 +7,12 @@ import * as _ from 'lodash';
 @Injectable()
 export class ExpenseService extends ModelService {
 
+    /**
+     * 
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param id 
+     */
     public async allBudget(user: any, id: string): Promise<any> {
         try {
             return await this.expenseModel.find({

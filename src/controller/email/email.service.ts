@@ -1,4 +1,4 @@
-/*** Documentation:
+/** Documentation:
  * To make this token a one-time-use token, I encourage you to
  * use the user’s current password hash in conjunction with
  * the user’s created date (in ticks) as the secret key to
@@ -11,7 +11,7 @@
  * has changed their password, it will generate a new password hash
  * invalidating the secret key that references the old password
  * Reference: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
- **/
+ */
 import { Injectable } from '@nestjs/common';
 import { ModelService } from '../model.service';
 import * as jwt from 'jsonwebtoken';
@@ -23,6 +23,17 @@ import * as MailGen from 'mailgen';
 @Injectable()
 export class EmailService extends ModelService {
 
+    /**
+     * Service method
+     * 
+     * searches database for user email, if email is not found an error is returned
+     * using jsonwebTokens a token with an expiry date of 1hour is
+     * generated.
+     * the generated token and unique user id is used to generate a
+     * url link which expires in an hour.
+     * @param email user email
+     * @returns url link or an error
+     */
     public async sendPasswordResetEmail(email: any) {
         try {
             const user = await this.userModel.findOne({ email });
@@ -38,6 +49,11 @@ export class EmailService extends ModelService {
         }
     }
 
+    /**
+     * verifies token, encrypts the new password using bcrypt.js
+     * saves the encrypted password in the database
+     * @param body json data containing user id, token and new password
+     */
     public receiveNewPassword(body: any) {
         return new Promise((resolve, reject) => {
             const { id, token, password } = body;
@@ -61,6 +77,11 @@ export class EmailService extends ModelService {
         });
     }
 
+    /**
+     * determines if user token is authentic and still valid
+     * @param id user id
+     * @param token user token
+     */
     public isUserIdValid(id: string, token: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.userModel.findOne({ _id: id }).then((user) => {
@@ -72,6 +93,11 @@ export class EmailService extends ModelService {
         });
     }
 
+    /**
+     * creates a template containing the url hich is sent to the user's mail.
+     * @param user full user info from database
+     * @param url url for password reset page
+     */
     private resetPasswordTemplate(user: any, url: string) {
         const mailGenerator = new MailGen({
             theme: 'salted',
@@ -104,6 +130,11 @@ export class EmailService extends ModelService {
         };
     }
 
+    /**
+     * sends email to the user using sendgrid mailer
+     * @param user user info
+     * @param url url for password reset page
+     */
     private async sendEmail(user: any, url: any) {
         try {
             const msg = this.resetPasswordTemplate(user, url);

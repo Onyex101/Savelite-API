@@ -2,7 +2,7 @@
 export const configKeys = {
     JWT_SECRET: 'YN2X2tW8dn3KyeGrRQHLMr952cFnUY2e',
     SECRET: 'BhBwJueLqk7HzAFJcHeG22La85aRQXj4',
-    MONGODB_URI: 'mongodb://heroku_tg7gr6qm:q8e776fv65cscqpc1edujg0d1u@ds149353.mlab.com:49353/heroku_tg7gr6qm',
+    MONGODB_URI: 'mongodb://localhost:27017/savelite',
     RAVE_PUBLICK_KEY: '',
     RAVE_SECRET_KEY: '',
     RAVE_PRODUCTION_FLAG: false,

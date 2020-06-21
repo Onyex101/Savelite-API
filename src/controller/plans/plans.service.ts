@@ -9,6 +9,14 @@ import { PlanDto } from './../../dto/interface.dto';
 @Injectable()
 export class PlanService extends ModelService {
 
+    /**
+     * saves a new plan to database
+     * card info is encrypted before it is saved to database
+     * @param data plan info
+     * @param user decoded user info from validated token
+     * contains user id
+     * @returns new plan details
+     */
     public async create(data: PlanDto, user: any): Promise<any> {
         const body = _.pick(data, [
             'planName', 'periodicAmount', 'targetAmount', 'duration',
@@ -24,6 +32,13 @@ export class PlanService extends ModelService {
         }
     }
 
+    /**
+     * takes data from plan info supplied by user,
+     * calculates withdrawal date
+     * @param body plan info
+     * @param user decoded user info from validated token
+     * contains user id
+     */
     private async calculatePlan(body, user): Promise<any> {
         const periodAmount = parseFloat(body.periodicAmount);
         const trgAmount = parseFloat(body.targetAmount);
@@ -52,6 +67,11 @@ export class PlanService extends ModelService {
         return { ...body, ...moreDetails };
     }
 
+    /**
+     * 
+     * @param doc plan info with un-encrypted card details
+     * @returns plan info with encrypted card details
+     */
     private encryptCard(doc: any) {
         doc.card.card_no = encrypt.encryptCardNum(doc.card.card_no);
         doc.card.cvv = encrypt.encryptCVV(doc.card.cvv);
@@ -59,6 +79,11 @@ export class PlanService extends ModelService {
         return doc;
     }
 
+    /**
+     * decrupt card details
+     * @param doc plan info with encrypted card details
+     * @returns plan info with decrypted card details
+     */
     private decryptCard(doc: any) {
         doc.card.card_no = encrypt.decryptCardNum(doc.card.card_no);
         doc.card.cvv = encrypt.decryptCVV(doc.card.cvv);
@@ -66,6 +91,11 @@ export class PlanService extends ModelService {
         return doc;
     }
 
+    /**
+     * hide card details
+     * @param doc plan info with un-hidden card
+     * @returns hidden card details
+     */
     private hideDetails(doc: any) {
         doc.card.cvv = '***';
         doc.card.pin = '****';
@@ -78,6 +108,13 @@ export class PlanService extends ModelService {
         return doc;
     }
 
+    /**
+     * retrieves encrypted card details frrom the database,
+     * decrypts it then sends to user
+     * @param id plan id
+     * @param user decoded user info from validated token
+     * contains user id
+     */
     async getCard(id: string, user: any): Promise<any> {
         try {
             const doc = await this.planModel.findOne({ _id: id, _userID: user.id });
@@ -87,6 +124,12 @@ export class PlanService extends ModelService {
         }
     }
 
+    /**
+     * searches and returns all plans created by the user
+     * @param user decoded user info from validated token
+     * contains user id
+     * @returns list of all plans created by the user
+     */
     async allPlans(user: any): Promise<any> {
         try {
             const doc = await this.planModel.find({ _userID: user.id });
@@ -99,6 +142,13 @@ export class PlanService extends ModelService {
         }
     }
 
+    /**
+     * recalculate plan info before updating the database
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param data plan info to be updated
+     * @param id plan id
+     */
     async update(user: any, data: any, id: any): Promise<any> {
         data.card.amount = 0;
         const body = {
@@ -122,6 +172,14 @@ export class PlanService extends ModelService {
         }
     }
 
+    /**
+     * save the updated plan info to database
+     * @param plan 
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param id plan id
+     * @returns the updated info
+     */
     private async saveUpdate(plan, user, id): Promise<any> {
         try {
             let doc = await this.planModel.findOneAndUpdate({
@@ -135,6 +193,13 @@ export class PlanService extends ModelService {
         }
     }
 
+    /**
+     * delete user
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param id user id
+     * @returns deletion message
+     */
     async delete(user: any, id: any): Promise<any> {
         if (!ObjectID.isValid(id)) {
             return this.errorHandler('invalid id');

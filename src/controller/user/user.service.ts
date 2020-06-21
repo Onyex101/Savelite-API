@@ -37,6 +37,13 @@ export class UserService extends ModelService {
         });
     }
 
+    /**
+     * save image info to database
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param body image info
+     * @returns updated image info
+     */
     public async changeProfileImage(user: any, body: ImageDto) {
         return await this.userModel.findOneAndUpdate({
             _id: user.id,
@@ -46,6 +53,13 @@ export class UserService extends ModelService {
         }}, {new: true});
     }
 
+    /**
+     * save user info to be updated to database
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param body new user info
+     * @returns updated user info
+     */
     public async updateProfile(user: any, body: ProfileUpdateDto) {
         return await this.userModel.findOneAndUpdate({
             _id: user.id,
@@ -54,6 +68,14 @@ export class UserService extends ModelService {
         }}, {new: true});
     }
 
+    /**
+     * save firebase token which will be used for push notifications
+     * to database
+     * @param user decoded user info from validated token
+     * contains user id
+     * @param body notification token
+     * @returns user info
+     */
     public async saveToken(user: any, body: TokenDto) {
         return await this.userModel.findOneAndUpdate({
             _id: user.id,
