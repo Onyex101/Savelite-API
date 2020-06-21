@@ -7,3 +7,6 @@ https://www.positronx.io/ionic-firebase-fcm-push-notification-tutorial-with-exam
 https://www.techotopia.com/index.php/Sending_Firebase_Cloud_Messages_from_a_Node.js_Server
 
 git push heroku master
+
+git rm --cached savelite-c8f57-firebase-adminsdk.json
+git rm savelite-c8f57-firebase-adminsdk.json

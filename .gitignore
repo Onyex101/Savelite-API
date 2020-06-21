@@ -1,7 +1,8 @@
 # compiled output
 /dist
 /node_modules
-/savelite-c8f57-firebase-adminsdk.json
+# /savelite-c8f57-firebase-adminsdk.json
+/documentation
 
 # Logs
 logs
