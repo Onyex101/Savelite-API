@@ -2,7 +2,7 @@
 /dist
 /node_modules
 # /savelite-c8f57-firebase-adminsdk.json
-/documentation
+# /documentation
 
 # Logs
 logs

@@ -1,6 +1,5 @@
-import { Controller, Get, Post, UseGuards, Body, Res, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, NotFoundException, Param } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { EmailResetDto, PassResPageDto } from './../../dto/interface.dto';
 import { EmailService } from './email.service';
 import { ApiUseTags, ApiOkResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiCreatedResponse } from '@nestjs/swagger';
@@ -43,15 +42,19 @@ export class EmailController {
      * @param id user id
      * @param token user unique token for authentication
      */
-    @Get('reset/:id/:token')
+    @Get('link/:id/:token')
     @ApiOkResponse({description: 'The resource has been succesfully returned'})
     @ApiForbiddenResponse({description: 'forbidden'})
     @ApiNotFoundResponse({description: 'not found'})
-    async resetPassword(@Res() res: Response, @Param('id') id: string, @Param('token') token: string) {
-        if (await this.emailService.isUserIdValid(id, token)) {
-            return res.render('reset-password', {id, token});
+    async resetLink(@Param('id') id: string, @Param('token') token: string, @Res() res: Response) {
+        try {
+            const authenticate = await this.emailService.isUserIdValid(id, token);
+            if (authenticate) {
+                return res.render('reset-password', {id, token});
+            }
+        } catch (error) {
+            return res.render('404');
         }
-        throw new NotFoundException();
     }
 
     /**
@@ -70,4 +73,5 @@ export class EmailController {
             throw new NotFoundException(error);
         }
     }
+
 }

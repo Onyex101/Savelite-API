@@ -5,7 +5,6 @@ dotenv.config();
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
-
 /**
  * starting point for entire application
  */
@@ -18,6 +17,7 @@ async function bootstrap() {
   });
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+
   app.setViewEngine('hbs');
 
   const options = new DocumentBuilder()
@@ -28,7 +28,9 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+    customfavIcon: '../favicon.ico',
+  });
   await app.listen(process.env.PORT || 3000, () => {
     // tslint:disable-next-line: no-console
     // console.log(`app started at port ${process.env.PORT}`);

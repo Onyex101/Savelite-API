@@ -19,13 +19,12 @@ import * as bcrypt from 'bcryptjs';
 import { configKeys } from './../../config/config';
 import * as sgMail from '@sendgrid/mail';
 import * as MailGen from 'mailgen';
-
 @Injectable()
 export class EmailService extends ModelService {
 
     /**
      * Service method
-     * 
+     *
      * searches database for user email, if email is not found an error is returned
      * using jsonwebTokens a token with an expiry date of 1hour is
      * generated.
@@ -42,8 +41,8 @@ export class EmailService extends ModelService {
                 expiresIn: 3600, // 1 hour
             });
             const url = `${configKeys.EMAIL_URL}${user._id}/${token}`;
-            // await this.sendEmail(user, url);
-            return { url };
+            return await this.sendEmail(user, url);
+            // return {url};
         } catch (error) {
             return error;
         }
@@ -60,7 +59,8 @@ export class EmailService extends ModelService {
             this.userModel.findOne({ _id: id }).then((user) => {
                 const secret = user.password + '-' + user.createdAt;
                 const payload: any = jwt.verify(token, secret);
-                if (payload.id === user._id) {
+                // tslint:disable-next-line: triple-equals
+                if (payload.id == user._id) {
                     bcrypt.genSalt(10, (err, salt) => {
                         // Call error-handling middleware:
                         if (err) { reject(err); }
@@ -102,8 +102,9 @@ export class EmailService extends ModelService {
         const mailGenerator = new MailGen({
             theme: 'salted',
             product: {
-                name: 'savelite',
-                link: '',
+                name: 'Savelite',
+                link: 'http://localhost:3000',
+                logo: 'http://localhost:3000/logo2.png',
             },
         });
         const email = {
@@ -139,7 +140,7 @@ export class EmailService extends ModelService {
         try {
             const msg = this.resetPasswordTemplate(user, url);
             sgMail.setApiKey(configKeys.SENDGRID_KEY);
-            return sgMail.send(msg);
+            const mail = await sgMail.send(msg);
         } catch (error) {
             return error;
         }
