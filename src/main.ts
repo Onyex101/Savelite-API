@@ -21,7 +21,7 @@ async function bootstrap() {
   app.setViewEngine('hbs');
 
   const options = new DocumentBuilder()
-    .setTitle('Savelite')
+    .setTitle('Savelite API')
     .setDescription('Savelite API documentation')
     .setVersion('1.0')
     .addTag('users')
