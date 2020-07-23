@@ -11,7 +11,7 @@ export const configKeys = {
     IMGUR_CLIENT_ID: '924ff8331aaf4c1',
     EMAIL_URL: 'https://savelite-api.herokuapp.com/email/link/',
     version: '1.0.0',
-    DOWNLOAD_LINK: 'https://drive.google.com/file/d/1TYOBsnupJHO1VzGeQgz1t61lxUxZAmqA/view?usp=sharing',
+    DOWNLOAD_LINK: 'https://drive.google.com/file/d/1eGuKw8SnOym5E_HO-PdbuwfqKG2AxWi1/view?usp=sharing',
 };
 // 'mongodb://localhost:27017/savelite'
 // 'mongodb://heroku_tg7gr6qm:q8e776fv65cscqpc1edujg0d1u@ds149353.mlab.com:49353/heroku_tg7gr6qm'

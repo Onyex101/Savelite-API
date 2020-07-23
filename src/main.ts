@@ -11,7 +11,7 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: ['http://localhost', 'https://savelite-api.herokuapp.com'],
+    origin: ['http://localhost:8100', 'https://savelite-api.herokuapp.com'],
     credentials: true,
     exposedHeaders: ['Authorization'],
   });
